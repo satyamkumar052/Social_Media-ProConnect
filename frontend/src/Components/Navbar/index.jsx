@@ -19,7 +19,7 @@ function Navbar() {
 
             <h1 onClick={() => {
                     router.push("/dashboard")
-                }}><img src="/images/netwiselogo.png" alt="logo" /></h1>
+                }}><img src="/images/proconnect.jpg" alt="logo" /></h1>
 
             <div className={styles.navbarOptionContainer}>
 
