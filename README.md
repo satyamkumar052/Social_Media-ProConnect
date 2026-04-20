@@ -216,3 +216,9 @@ npm run dev
 | PUT    | `/api/connections/accept/:id` | Accept connection       |
 | PUT    | `/api/connections/reject/:id` | Reject connection       |
 | GET    | `/api/connections`            | Get user connections    |
+
+---
+
+## 🌐 Live Demo
+
+**Check out the deployed application:** [ProConnect - Live Demo](https://proconnect-topaz.vercel.app/)
