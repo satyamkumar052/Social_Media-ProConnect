@@ -4,6 +4,8 @@ import multer from "multer";
 
 const router = Router();
 
+
+// files will be stored in uploads folder
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')
