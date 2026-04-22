@@ -61,7 +61,7 @@ function UserProfile() {
     useEffect(() => {
         dispatch(getAboutUser({token : localStorage.getItem("token")}));
         dispatch(getAllPosts());
-    }, [])
+    }, [dispatch])
 
 
     useEffect(() => {
