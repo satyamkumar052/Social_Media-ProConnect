@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from "./index.module.css";
 import { BASE_URL } from '@/config';
 import { resetPostId } from '@/config/redux/reducer/postReducer';
+import { Toast } from 'bootstrap';
 
 
 function dashboard() {
@@ -25,6 +26,10 @@ function dashboard() {
     const [commentText, setCommentText] = useState("");
 
     const handleUpload = async () => {
+        if(postContent.trim().length === 0) {
+            Toast.error("Post content cannot be empty");
+            return;
+        }
         await dispatch(createPost({file:fileContent, body:postContent}));
         setTimeout(()=> {
             setPostContent("");
