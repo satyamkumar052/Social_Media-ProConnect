@@ -73,7 +73,7 @@ function MyConnectionsPage() {
                         )
                     }) 
                 }
-
+                <hr style={{backgroundColor:"#e0e0e0", height:"1px", border:"none"}} />
 
                 <h4>My Network</h4>
                 { authState.connectionRequest.filter((connection) => connection.status_accepted !== null).map((user, index) => {
