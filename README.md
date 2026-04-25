@@ -2,13 +2,6 @@
 
 A full-stack social media application built from scratch, enabling users to create profiles, connect with other professionals, share posts with images, and engage through comments. ProConnect demonstrates modern web development practices with a secure backend and responsive frontend.
 
-## 📋 Quick Links
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Installation](#-installation--setup)
-- [Usage](#-usage)
-- [API Endpoints](#-api-endpoints)
 
 ---
 
