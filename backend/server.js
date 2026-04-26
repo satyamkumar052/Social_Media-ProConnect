@@ -24,8 +24,10 @@ const start = () => {
 app.use("/", UserRouter);
 app.use("/", PostRouter);
 
-app.listen(8080, () => {
-    console.log("Server running on 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
     start();
 });
 
