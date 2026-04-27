@@ -18,7 +18,8 @@ app.use(express.static("uploads"));
 
 const start = () => {
     mongoose.connect(process.env.MONGOURL)
-    .then(() => console.log('Connected!'));
+    .then(() => console.log('Connected!'))
+    .catch((err) => console.log(err));
 };
 
 app.use("/", UserRouter);
