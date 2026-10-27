@@ -8,14 +8,11 @@ import { getPendingConnectionRequests } from '@/config/redux/action/authAction';
 function Navbar() {
 
     const router = useRouter();
-
     const dispatch = useDispatch();
-
     const authState = useSelector((state) => state.auth);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-
         if (token) {
             dispatch(getPendingConnectionRequests({ token }));
         }
@@ -25,44 +22,60 @@ function Navbar() {
 
     return (
         <div className={styles.container}>
-
             <nav className={styles.navbar}>
 
-                <h1 onClick={() => {
-                    router.push("/dashboard")
-                }}><img src="/images/proconnect.jpg" alt="logo" /></h1>
+                <h1 onClick={() => router.push("/dashboard")}>
+                    <img src="/images/proconnect.jpg" alt="ProConnect logo" />
+                </h1>
 
                 <div className={styles.navbarOptionContainer}>
 
-                    {authState.profileFetched && <div>
-                        <div style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
-                            <div className={styles.notificationButton} onClick={() => router.push("/my_connections")}>
+                    {authState.profileFetched && (
+                        <div className={styles.navLinks}>
+                            <div
+                                className={styles.notificationButton}
+                                onClick={() => router.push("/my_connections")}
+                            >
                                 Requests
-                                {pendingCount > 0 && <span className={styles.badge}>{pendingCount}</span>}
+                                {pendingCount > 0 && (
+                                    <span className={styles.badge}>{pendingCount}</span>
+                                )}
                             </div>
 
-                            <p onClick={() => {
-                                router.push("/profile");
-                            }} style={{ fontWeight: "bold", cursor: "pointer" }}>Profile</p>
+                            <span
+                                className={styles.navItem}
+                                onClick={() => router.push("/profile")}
+                            >
+                                Profile
+                            </span>
 
-                            <p style={{ cursor: "pointer" }} onClick={() => {
-                                localStorage.removeItem("token");
-                                dispatch(reset());
-                                router.push("/login");
-                            }}>Logout</p>
-
+                            <span
+                                className={styles.logoutBtn}
+                                onClick={() => {
+                                    localStorage.removeItem("token");
+                                    dispatch(reset());
+                                    router.push("/login");
+                                }}
+                            >
+                                Logout
+                            </span>
                         </div>
-                    </div>}
+                    )}
 
-
-                    {!authState.profileFetched && <div className={styles.buttonJoin} onClick={() => router.push("/login")}>Be a part</div>}
+                    {!authState.profileFetched && (
+                        <div
+                            className={styles.buttonJoin}
+                            onClick={() => router.push("/login")}
+                        >
+                            Be a part
+                        </div>
+                    )}
 
                 </div>
 
             </nav>
-
         </div>
-    )
+    );
 }
 
-export default Navbar
+export default Navbar;

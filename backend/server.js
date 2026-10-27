@@ -16,10 +16,13 @@ app.use(express.json());
 app.use(express.static("uploads"));
 
 
-const start = () => {
-    mongoose.connect(process.env.MONGOURL)
-    .then(() => console.log('Connected!'))
-    .catch((err) => console.log(err));
+const start = async () => {
+    try {
+        await mongoose.connect(process.env.MONGOURL);
+        console.log('Connected to MongoDB!');
+    } catch (err) {
+        console.error('MongoDB connection error:', err);
+    }
 };
 
 app.use("/", UserRouter);
@@ -28,6 +31,10 @@ app.use("/", PostRouter);
 const PORT = process.env.PORT || 8080;
 
 app.get("/health", (_, res) => {
+    const isDbReady = mongoose.connection.readyState === 1;
+    if (!isDbReady) {
+        return res.status(503).json({ ok: false, error: "Database connecting..." });
+    }
     res.status(200).json({ ok: true, service: "backend" });
 });
 

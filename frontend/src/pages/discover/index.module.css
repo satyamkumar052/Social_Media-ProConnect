@@ -1,21 +1,55 @@
 .allUserProfile {
-    max-width: 80%;
-    align-items: center;
+    max-width: 760px;
+    width: 100%;
+    margin: 1.5rem auto;
+    display: flex;
     flex-direction: column;
-    margin-top: 1rem;
+    gap: 0.8rem;
 }
 
 .userCard {
     display: flex;
     gap: 1.2rem;
-    padding: 1.3rem;
+    padding: 1.1rem 1.4rem;
     align-items: center;
-    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.2rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
     cursor: pointer;
+    transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.userCard:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--color-primary-light);
 }
 
 .userCard_image {
-    width: 10%;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--color-border);
+    transition: border-color var(--transition);
+}
+
+.userCard:hover .userCard_image {
+    border-color: var(--color-primary-light);
+}
+
+.userCard h1 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.userCard p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0.2rem 0 0 0;
 }

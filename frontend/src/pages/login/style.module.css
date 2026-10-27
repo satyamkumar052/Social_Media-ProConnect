@@ -2,95 +2,145 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90svh;
-    background-color: rgb(238, 236, 236);
+    min-height: 90svh;
+    background: linear-gradient(135deg, #f5f4f8 0%, #ede9fe 100%);
+    padding: 1.5rem;
 }
 
 .cardContainer {
-    height: 75vh;
     display: flex;
-    border-radius: 0.8rem;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    width: 70vw;
-    background: white;
-    box-shadow: 10px 10px 15px rgb(171, 170, 170);
+    width: min(70vw, 900px);
+    min-height: 520px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-lg);
+    animation: cardEntrance 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Left panel ─────────────────────────────────────────── */
 .cardContainer_left {
-    flex:0.6;
-    padding: 2rem;
+    flex: 0.6;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
 .cardleft_heading {
-    font-weight: bold;
-    font-size: 1.8rem;
-    margin-bottom: 1.2rem;
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-bottom: 1.6rem;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
 }
 
 .inputContainers {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 400px;
-    margin: 0 auto;
-    gap: 1.5rem;
+    width: 100%;
+    max-width: 380px;
+    gap: 1.1rem;
 }
 
 .inputRow {
-    width: fit-content;
     display: flex;
-    gap: 1.2rem;
+    gap: 1rem;
+    width: 100%;
+}
+
+.inputField {
+    padding: 0.85rem 1.1rem;
+    outline: none;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--color-border);
+    width: 100%;
+    font-size: 0.95rem;
+    color: var(--color-text);
+    background: var(--color-bg);
+    transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.inputField:focus {
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.inputField::placeholder {
+    color: var(--color-text-subtle);
 }
 
 .buttonWithOutline {
-    border-radius: 10px;
-    font-size: 1.2rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 600;
     width: 100%;
-    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #116df8;
-    padding-block: 0.6rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    padding: 0.82rem;
     color: white;
     cursor: pointer;
     user-select: none;
+    border: none;
+    box-shadow: 0 3px 14px rgba(124, 58, 237, 0.3);
+    transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+    letter-spacing: 0.02em;
 }
 
 .buttonWithOutline:hover {
-    opacity: 0.85;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
+.buttonWithOutline:active {
+    transform: translateY(0) scale(0.98);
+    opacity: 0.9;
+}
 
+/* ── Right panel ────────────────────────────────────────── */
 .cardContainer_right {
     display: flex;
-    flex:0.4;
-    background-color: #02498bcd;
+    flex: 0.4;
+    background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-accent) 100%);
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: white;
     flex-direction: column;
-    padding-inline: 1.2rem;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+    text-align: center;
 }
 
-.cardContainer_right > div {
-    margin-top: 1.2rem;
+.cardContainer_right > * {
+    opacity: 0.92;
 }
 
-
-.inputField {
-    padding-inline: 1.3rem;
-    padding-block: 0.8rem;
-    outline: none;
-    border-radius: 10px;
-    border: 1px solid rgb(129, 126, 126);
-    width: 100%;
-}
-
-@media screen and (max-width:600px) {
+/* ── Mobile ─────────────────────────────────────────────── */
+@media screen and (max-width: 700px) {
     .cardContainer {
         flex-direction: column;
+        width: 95vw;
+        min-height: auto;
+    }
+
+    .cardContainer_right {
+        padding: 1.5rem;
+        min-height: 140px;
     }
 }
