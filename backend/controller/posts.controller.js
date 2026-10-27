@@ -168,40 +168,49 @@ export const increment_likes = async (req, res) => {
     const { post_id, token } = req.body;
 
     try {
-        const post = await Post.findOne({ _id: post_id });
+        if (!token) {
+            return res.status(401).json({ message: "Authentication required" });
+        }
+
+        const user = await User.findOne({ token }).select("_id");
+        if (!user) {
+            return res.status(401).json({ message: "Invalid user token" });
+        }
+
+        const post = await Post.findById(post_id);
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
         }
 
-        if (!post.likedBy) {
-            post.likedBy = [];
-        }
+        const userIdStr = user._id.toString();
+        const alreadyLiked = Array.isArray(post.likedBy) && post.likedBy.some((id) => id.toString() === userIdStr);
 
-        let user = null;
-        if (token) {
-            user = await User.findOne({ token }).select("_id");
-        }
-
-        if (user) {
-            const userIndex = post.likedBy.findIndex((id) => id.toString() === user._id.toString());
-            if (userIndex !== -1) {
-                // User already liked -> unlike (-1)
-                post.likedBy.splice(userIndex, 1);
-                post.likes = Math.max(0, post.likes - 1);
-                await post.save();
-                return res.json({ message: "Post Unliked", likes: post.likes, liked: false });
-            } else {
-                // User has not liked -> like (+1)
-                post.likedBy.push(user._id);
-                post.likes = post.likes + 1;
-                await post.save();
-                return res.json({ message: "Post Liked", likes: post.likes, liked: true });
-            }
+        let updatedPost;
+        if (alreadyLiked) {
+            // Unlike: atomically remove user ID
+            updatedPost = await Post.findByIdAndUpdate(
+                post_id,
+                { $pull: { likedBy: user._id } },
+                { new: true }
+            );
         } else {
-            post.likes = post.likes + 1;
-            await post.save();
-            return res.json({ message: "Likes Incremented", likes: post.likes });
+            // Like: atomically add user ID (prevents duplicate likes)
+            updatedPost = await Post.findByIdAndUpdate(
+                post_id,
+                { $addToSet: { likedBy: user._id } },
+                { new: true }
+            );
         }
+
+        // Strictly enforce likes count matches the unique likedBy users length
+        updatedPost.likes = updatedPost.likedBy.length;
+        await updatedPost.save();
+
+        return res.json({
+            message: alreadyLiked ? "Post Unliked" : "Post Liked",
+            likes: updatedPost.likes,
+            liked: !alreadyLiked
+        });
 
     } catch(err) {
         return res.status(500).json({ message: err.message});
