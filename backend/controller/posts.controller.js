@@ -165,20 +165,43 @@ export const delete_comment_of_user = async (req, res) => {
 
 
 export const increment_likes = async (req, res) => {
-
-    const {post_id} = req.body;
+    const { post_id, token } = req.body;
 
     try {
-        const post = await Post.findOne({_id: post_id });
+        const post = await Post.findOne({ _id: post_id });
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
         }
 
-        post.likes = post.likes + 1;
+        if (!post.likedBy) {
+            post.likedBy = [];
+        }
 
-        await post.save();
+        let user = null;
+        if (token) {
+            user = await User.findOne({ token }).select("_id");
+        }
 
-        return res.json({ message: "Likes Incremented" });
+        if (user) {
+            const userIndex = post.likedBy.findIndex((id) => id.toString() === user._id.toString());
+            if (userIndex !== -1) {
+                // User already liked -> unlike (-1)
+                post.likedBy.splice(userIndex, 1);
+                post.likes = Math.max(0, post.likes - 1);
+                await post.save();
+                return res.json({ message: "Post Unliked", likes: post.likes, liked: false });
+            } else {
+                // User has not liked -> like (+1)
+                post.likedBy.push(user._id);
+                post.likes = post.likes + 1;
+                await post.save();
+                return res.json({ message: "Post Liked", likes: post.likes, liked: true });
+            }
+        } else {
+            post.likes = post.likes + 1;
+            await post.save();
+            return res.json({ message: "Likes Incremented", likes: post.likes });
+        }
 
     } catch(err) {
         return res.status(500).json({ message: err.message});
